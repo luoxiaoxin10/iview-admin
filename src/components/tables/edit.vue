@@ -5,7 +5,7 @@
       <Button v-if="editable" @click="startEdit" class="tables-edit-btn" style="padding: 2px 4px;" type="text"><Icon type="md-create"></Icon></Button>
     </div>
     <div v-else class="tables-editting-con">
-      <Input :value="value" @input="handleInput" class="tables-edit-input"/>
+      <Input v-model="edittingText" class="tables-edit-input"/>
       <Button @click="saveEdit" style="padding: 6px 4px;" type="text"><Icon type="md-checkmark"></Icon></Button>
       <Button @click="canceltEdit" style="padding: 6px 4px;" type="text"><Icon type="md-close"></Icon></Button>
     </div>
@@ -15,6 +15,11 @@
 <script>
 export default {
   name: 'TablesEdit',
+  data(){
+    return {
+      edittingText:''
+    }
+  },
   props: {
     value: [String, Number],
     edittingCellId: String,
@@ -27,9 +32,6 @@ export default {
     }
   },
   methods: {
-    handleInput (val) {
-      this.$emit('input', val)
-    },
     startEdit () {
       this.$emit('on-start-edit', this.params)
     },
@@ -37,8 +39,11 @@ export default {
       this.$emit('on-save-edit', this.params)
     },
     canceltEdit () {
-      this.$emit('on-cancel-edit', this.params)
+      this.$emit('on-cancel-edit', this.params, this.edittingText)
     }
+  },
+  created(){
+    this.edittingText = this.value
   }
 }
 </script>
